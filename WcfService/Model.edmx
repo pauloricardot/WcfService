@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ecommerceModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="idCliente" />
+          </Key>
+          <Property Name="idCliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="45" />
+          <Property Name="sobrenome" Type="varchar" MaxLength="45" />
+          <Property Name="email" Type="varchar" MaxLength="45" />
+          <Property Name="dataCadastro" Type="date" />
+          <Property Name="ativo" Type="bool" />
+        </EntityType>
+        <EntityType Name="produto">
+          <Key>
+            <PropertyRef Name="idProduto" />
+          </Key>
+          <Property Name="idProduto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="45" />
+          <Property Name="valor" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="disponivel" Type="bool" />
+          <Property Name="Cliente_idCliente" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_Produto_Cliente">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="produto" Type="Self.produto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="idCliente" />
+            </Principal>
+            <Dependent Role="produto">
+              <PropertyRef Name="Cliente_idCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ecommerceModelStoreContainer">
+          <EntitySet Name="cliente" EntityType="Self.cliente" Schema="ecommerce" store:Type="Tables" />
+          <EntitySet Name="produto" EntityType="Self.produto" Schema="ecommerce" store:Type="Tables" />
+          <AssociationSet Name="fk_Produto_Cliente" Association="Self.fk_Produto_Cliente">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="produto" EntitySet="produto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ecommerceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="idCliente" />
+          </Key>
+          <Property Name="idCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="sobrenome" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="dataCadastro" Type="DateTime" />
+          <Property Name="ativo" Type="Boolean" />
+          <NavigationProperty Name="produto" Relationship="Self.fk_Produto_Cliente" FromRole="cliente" ToRole="produto" />
+        </EntityType>
+        <EntityType Name="produto">
+          <Key>
+            <PropertyRef Name="idProduto" />
+          </Key>
+          <Property Name="idProduto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="valor" Type="Decimal" />
+          <Property Name="disponivel" Type="Boolean" />
+          <Property Name="Cliente_idCliente" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="cliente" Relationship="Self.fk_Produto_Cliente" FromRole="produto" ToRole="cliente" />
+        </EntityType>
+        <Association Name="fk_Produto_Cliente">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="produto" Type="Self.produto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="idCliente" />
+            </Principal>
+            <Dependent Role="produto">
+              <PropertyRef Name="Cliente_idCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ecommerceEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cliente" EntityType="Self.cliente" />
+          <EntitySet Name="produto" EntityType="Self.produto" />
+          <AssociationSet Name="fk_Produto_Cliente" Association="Self.fk_Produto_Cliente">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="produto" EntitySet="produto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ecommerceModelStoreContainer" CdmEntityContainer="ecommerceEntities">
+          <EntitySetMapping Name="cliente">
+            <EntityTypeMapping TypeName="ecommerceModel.cliente">
+              <MappingFragment StoreEntitySet="cliente">
+                <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="sobrenome" ColumnName="sobrenome" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="dataCadastro" ColumnName="dataCadastro" />
+                <ScalarProperty Name="ativo" ColumnName="ativo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="produto">
+            <EntityTypeMapping TypeName="ecommerceModel.produto">
+              <MappingFragment StoreEntitySet="produto">
+                <ScalarProperty Name="idProduto" ColumnName="idProduto" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="valor" ColumnName="valor" />
+                <ScalarProperty Name="disponivel" ColumnName="disponivel" />
+                <ScalarProperty Name="Cliente_idCliente" ColumnName="Cliente_idCliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
